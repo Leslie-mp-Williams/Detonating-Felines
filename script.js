@@ -1,50 +1,25 @@
-let actionCards = [
-  {
-    type: "action", name: "attack",
-    type: "action", name: "future",
-    type: "action", name: "favor",
-    type: "action", name: "shuffle",
-    type: "action", name: "skip",
-    type: "action", name: "nope",
-  },
-];
-let pictureCards = [
-  {
-    type: "picture", name: "zombie",
-    type: "picture", name: "momma",
-    type: "picture", name: "schrodinger",
-    type: "picture", name: "bikini",
-    type: "picture", name: "shy",
-  },
-];
-let specialCards = [
-  {
-    type: "special" name: "defuse",
-    type: "special" name: "explode",
-  },
-];
+import { actionCards, pictureCards, specialCards } from "./metadata";
+import NewGame from "./src/class/NewGame";
+import Card from "./src/class/Card";
+import Player from "./src/class/Player";
+import FullDeck from "./src/class/FullDeck";
 
-let fullDeck = actionCards.concat(specialCards, pictureCards);
+const newGame = new NewGame();
+const deck = new FullDeck();
 
-let startGame = new newGame();
-let player1 = new addPlayer("Jim");
-let player2 = new addPlayer("Steve");
+let nameInput = document.getElementById("nameinput");
 
-let newGame = () => {
-  this.numberOfPlayers = [];
+window.addEventListener("load", () => {
+  document
+    .getElementById("button")
+    .addEventListener("click", btnEvtHandler, false);
+});
+
+let btnEvtHandler = () => {
+  const playerName = nameInput.value;
+  newGame.addPlayer(playerName);
 };
 
-newGame.prototype.pushPlayer = (addPlayer) => {
-  this.numberOfPlayers.push(addPlayer);
-  addPlayer.id = this.numberOfPlayers.length;
-  return this;
-};
-
-let addPlayer = (name) => {
-  this.name = name;
-  this.handSize = 0;
-  this.id = null;
-  return alert("Player " + this.name + " has been created");
-};
-
-startGame.pushPlayer(player1);
+deck.addCards(Card, actionCards);
+deck.addCards(Card, pictureCards);
+deck.addCards(Card, specialCards);
