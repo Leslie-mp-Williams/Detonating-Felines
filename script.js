@@ -1,26 +1,26 @@
 let actionCards = [
   {
-    action: "attack",
-    action: "future",
-    action: "favor",
-    action: "shuffle",
-    action: "skip",
-    action: "nope",
+    type: "action", name: "attack",
+    type: "action", name: "future",
+    type: "action", name: "favor",
+    type: "action", name: "shuffle",
+    type: "action", name: "skip",
+    type: "action", name: "nope",
   },
 ];
 let pictureCards = [
   {
-    picture: "zombie",
-    picture: "momma",
-    picture: "schrodinger",
-    picture: "bikini",
-    picture: "shy",
+    type: "picture", name: "zombie",
+    type: "picture", name: "momma",
+    type: "picture", name: "schrodinger",
+    type: "picture", name: "bikini",
+    type: "picture", name: "shy",
   },
 ];
 let specialCards = [
   {
-    special: "defuse",
-    special: "explode",
+    type: "special" name: "defuse",
+    type: "special" name: "explode",
   },
 ];
 
