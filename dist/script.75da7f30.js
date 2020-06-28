@@ -123,99 +123,75 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.specialCards = exports.pictureCards = exports.actionCards = void 0;
+exports.specialCards = exports.pictureCards = exports.actionCards2 = exports.actionCards = void 0;
 var actionCards = [{
   type: "action",
-  name: "attack"
+  name: "attack",
+  amount: 4
 }, {
   type: "action",
-  name: "future"
+  name: "future",
+  amount: 5
 }, {
   type: "action",
-  name: "favor"
+  name: "favor",
+  amount: 4
 }, {
   type: "action",
-  name: "shuffle"
+  name: "shuffle",
+  amount: 4
 }, {
   type: "action",
-  name: "skip"
+  name: "skip",
+  amount: 4
 }, {
   type: "action",
-  name: "nope"
+  name: "nope",
+  amount: 5
 }];
 exports.actionCards = actionCards;
+var actionCards2 = [{
+  type: "action",
+  name: "future",
+  amount: 5
+}, {
+  type: "action",
+  name: "nope",
+  amount: 5
+}];
+exports.actionCards2 = actionCards2;
 var pictureCards = [{
   type: "picture",
-  name: "zombie"
+  name: "zombie",
+  amount: 4
 }, {
   type: "picture",
-  name: "momma"
+  name: "momma",
+  amount: 4
 }, {
   type: "picture",
-  name: "schrodinger"
+  name: "schrodinger",
+  amount: 4
 }, {
   type: "picture",
-  name: "bikini"
+  name: "bikini",
+  amount: 4
 }, {
   type: "picture",
-  name: "shy"
+  name: "shy",
+  amount: 4
 }];
 exports.pictureCards = pictureCards;
 var specialCards = [{
   type: "special",
-  name: "defuse"
+  name: "defuse",
+  amount: 6
 }, {
   type: "special",
-  name: "explode"
+  name: "explode",
+  amount: 4
 }];
 exports.specialCards = specialCards;
-},{}],"src/class/NewGame.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var NewGame = function NewGame() {
-  var _this = this;
-
-  _classCallCheck(this, NewGame);
-
-  _defineProperty(this, "addPlayer", function (playerName) {
-    var playerId = _this.numberOfPlayers.length;
-
-    _this.numberOfPlayers.push(new Player(playerName, playerId));
-
-    console.log(_this.numberOfPlayers);
-  });
-
-  this.numberOfPlayers = [];
-};
-
-exports.default = NewGame;
-},{}],"src/class/Card.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Card = function Card(name, id) {
-  _classCallCheck(this, Card);
-
-  this.name = name;
-  this.id = id;
-};
-
-exports.default = Card;
 },{}],"src/class/Player.js":[function(require,module,exports) {
 "use strict";
 
@@ -235,6 +211,59 @@ var Player = function Player(name, id) {
 };
 
 exports.default = Player;
+},{}],"src/class/NewGame.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _Player = _interopRequireDefault(require("./Player"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var NewGame = function NewGame() {
+  var _this = this;
+
+  _classCallCheck(this, NewGame);
+
+  _defineProperty(this, "addPlayer", function (playerName) {
+    var playerId = _this.playerList.length;
+
+    _this.playerList.push(new _Player.default(playerName, playerId, _Player.default));
+
+    console.log(_this.playerList);
+  });
+
+  this.playerList = [];
+};
+
+exports.default = NewGame;
+},{"./Player":"src/class/Player.js"}],"src/class/Card.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Card = function Card(id, type, name, amount) {
+  _classCallCheck(this, Card);
+
+  this.id = id;
+  this.type = type;
+  this.name = name;
+  this.amount = amount;
+};
+
+exports.default = Card;
 },{}],"src/class/FullDeck.js":[function(require,module,exports) {
 "use strict";
 
@@ -253,10 +282,20 @@ var FullDeck = function FullDeck() {
   _classCallCheck(this, FullDeck);
 
   _defineProperty(this, "addCards", function (Card, cardData) {
-    cardData.map(function (cardObj) {
-      var id = _this.deck.length();
+    times(4)(function () {
+      return cardData.map(function (cardObj) {
+        var id = _this.deck.length;
+        var newCard = new Card(id, cardObj.type, cardObj.name, cardObj.amount);
 
-      var newCard = new Card(cardObj.name, id);
+        _this.deck.push(newCard);
+      });
+    });
+  });
+
+  _defineProperty(this, "addExtras", function (Card, cardData) {
+    cardData.map(function (cardObj) {
+      var id = _this.deck.length;
+      var newCard = new Card(id, cardObj.type, cardObj.name, cardObj.amount);
 
       _this.deck.push(newCard);
     });
@@ -266,6 +305,32 @@ var FullDeck = function FullDeck() {
 };
 
 exports.default = FullDeck;
+
+var times = function times(x) {
+  return function (f) {
+    if (x > 0) {
+      f();
+      times(x - 1)(f);
+    }
+  };
+};
+},{}],"src/class/PlayerHand.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var PlayerHand = function PlayerHand() {
+  _classCallCheck(this, PlayerHand);
+
+  this.hand = [];
+};
+
+exports.default = PlayerHand;
 },{}],"script.js":[function(require,module,exports) {
 "use strict";
 
@@ -278,6 +343,8 @@ var _Card = _interopRequireDefault(require("./src/class/Card"));
 var _Player = _interopRequireDefault(require("./src/class/Player"));
 
 var _FullDeck = _interopRequireDefault(require("./src/class/FullDeck"));
+
+var _PlayerHand = _interopRequireDefault(require("./src/class/PlayerHand"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -295,8 +362,8 @@ var btnEvtHandler = function btnEvtHandler() {
 
 deck.addCards(_Card.default, _metadata.actionCards);
 deck.addCards(_Card.default, _metadata.pictureCards);
-deck.addCards(_Card.default, _metadata.specialCards);
-},{"./metadata":"metadata.js","./src/class/NewGame":"src/class/NewGame.js","./src/class/Card":"src/class/Card.js","./src/class/Player":"src/class/Player.js","./src/class/FullDeck":"src/class/FullDeck.js"}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+deck.addExtras(_Card.default, _metadata.actionCards2);
+},{"./metadata":"metadata.js","./src/class/NewGame":"src/class/NewGame.js","./src/class/Card":"src/class/Card.js","./src/class/Player":"src/class/Player.js","./src/class/FullDeck":"src/class/FullDeck.js","./src/class/PlayerHand":"src/class/PlayerHand.js"}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -324,7 +391,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37125" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34545" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

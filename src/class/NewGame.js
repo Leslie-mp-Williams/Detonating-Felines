@@ -1,10 +1,12 @@
+import Player from "./Player";
+
 export default class NewGame {
   constructor() {
-    this.numberOfPlayers = [];
+    this.playerList = [];
   }
   addPlayer = (playerName) => {
-    const playerId = this.numberOfPlayers.length;
-    this.numberOfPlayers.push(new Player(playerName, playerId));
-    console.log(this.numberOfPlayers);
+    const playerId = this.playerList.length;
+    this.playerList.push(new Player(playerName, playerId, Player));
+    console.log(this.playerList);
   };
 }
