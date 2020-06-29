@@ -1,5 +1,6 @@
 import Player from "./Player";
 
+//This adds player to playerlist array-----------------
 export default class NewGame {
   constructor() {
     this.playerList = [];

@@ -22,3 +22,5 @@ export const specialCards = [
   { type: "special", name: "defuse", amount: 6 },
   { type: "special", name: "explode", amount: 4 },
 ];
+
+//All the cards in the game

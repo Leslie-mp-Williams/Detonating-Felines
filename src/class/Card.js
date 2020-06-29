@@ -6,3 +6,4 @@ export default class Card {
     this.amount = amount;
   }
 }
+//Card constructor

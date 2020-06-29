@@ -190,7 +190,8 @@ var specialCards = [{
   type: "special",
   name: "explode",
   amount: 4
-}];
+}]; //All the cards in the game
+
 exports.specialCards = specialCards;
 },{}],"src/class/Player.js":[function(require,module,exports) {
 "use strict";
@@ -205,10 +206,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Player = function Player(name, id) {
   _classCallCheck(this, Player);
 
-  this.name = name;
-  this.initialHandSize = 4;
   this.id = id;
-};
+  this.name = name;
+  this.initHand = [];
+}; //Player constructor
+
 
 exports.default = Player;
 },{}],"src/class/NewGame.js":[function(require,module,exports) {
@@ -227,6 +229,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//This adds player to playerlist array-----------------
 var NewGame = function NewGame() {
   var _this = this;
 
@@ -261,7 +264,8 @@ var Card = function Card(id, type, name, amount) {
   this.type = type;
   this.name = name;
   this.amount = amount;
-};
+}; //Card constructor
+
 
 exports.default = Card;
 },{}],"src/class/FullDeck.js":[function(require,module,exports) {
@@ -271,6 +275,12 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+
+var _NewGame = _interopRequireDefault(require("./NewGame"));
+
+var _Player = _interopRequireDefault(require("./Player"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -301,8 +311,27 @@ var FullDeck = function FullDeck() {
     });
   });
 
+  _defineProperty(this, "shuffle", function () {
+    var m = _this.deck.length,
+        t,
+        i;
+
+    while (m) {
+      i = Math.floor(Math.random() * m--);
+      t = _this.deck[m];
+      _this.deck[m] = _this.deck[i];
+      _this.deck[i] = t;
+    }
+  });
+
+  _defineProperty(this, "dealCards", function () {
+    return _this.deck.splice(0, 4);
+  });
+
   this.deck = [];
-};
+} //Adds cards with quantity of 4 to deck
+; //Algorithm for the shuffle
+
 
 exports.default = FullDeck;
 
@@ -313,25 +342,8 @@ var times = function times(x) {
       times(x - 1)(f);
     }
   };
-};
-},{}],"src/class/PlayerHand.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var PlayerHand = function PlayerHand() {
-  _classCallCheck(this, PlayerHand);
-
-  this.hand = [];
-};
-
-exports.default = PlayerHand;
-},{}],"script.js":[function(require,module,exports) {
+}; ///deal cards to players, splicing from deck and pushing to new player arrays
+},{"./NewGame":"src/class/NewGame.js","./Player":"src/class/Player.js"}],"script.js":[function(require,module,exports) {
 "use strict";
 
 var _metadata = require("./metadata");
@@ -340,20 +352,20 @@ var _NewGame = _interopRequireDefault(require("./src/class/NewGame"));
 
 var _Card = _interopRequireDefault(require("./src/class/Card"));
 
-var _Player = _interopRequireDefault(require("./src/class/Player"));
-
 var _FullDeck = _interopRequireDefault(require("./src/class/FullDeck"));
 
-var _PlayerHand = _interopRequireDefault(require("./src/class/PlayerHand"));
+var _Player = _interopRequireDefault(require("./src/class/Player"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var newGame = new _NewGame.default();
 var deck = new _FullDeck.default();
+var newPlayer = new _Player.default(); //Takes input from textbox, turns it into username
+
 var nameInput = document.getElementById("nameinput");
 window.addEventListener("load", function () {
   document.getElementById("button").addEventListener("click", btnEvtHandler, false);
-});
+}); //Button to add username and join game
 
 var btnEvtHandler = function btnEvtHandler() {
   var playerName = nameInput.value;
@@ -363,7 +375,10 @@ var btnEvtHandler = function btnEvtHandler() {
 deck.addCards(_Card.default, _metadata.actionCards);
 deck.addCards(_Card.default, _metadata.pictureCards);
 deck.addExtras(_Card.default, _metadata.actionCards2);
-},{"./metadata":"metadata.js","./src/class/NewGame":"src/class/NewGame.js","./src/class/Card":"src/class/Card.js","./src/class/Player":"src/class/Player.js","./src/class/FullDeck":"src/class/FullDeck.js","./src/class/PlayerHand":"src/class/PlayerHand.js"}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+deck.shuffle(); //This is where I am currently, 4 cards spliced from FullDeck
+
+console.log(deck.dealCards());
+},{"./metadata":"metadata.js","./src/class/NewGame":"src/class/NewGame.js","./src/class/Card":"src/class/Card.js","./src/class/FullDeck":"src/class/FullDeck.js","./src/class/Player":"src/class/Player.js"}],"../../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -391,7 +406,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34545" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34631" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
