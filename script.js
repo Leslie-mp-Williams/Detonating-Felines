@@ -1,34 +1,43 @@
 import { actionCards, actionCards2, pictureCards } from './metadata';
-import NewGame from './src/class/NewGame';
 import Card from './src/class/Card';
 import FullDeck from './src/class/FullDeck';
 import Player from './src/class/Player';
 
-const newGame = new NewGame();
 const deck = new FullDeck();
-const newPlayer = new Player();
+const players = [];
 
-//Takes input from textbox, turns it into username
-let nameInput = document.getElementById('nameinput');
+const addPlayer = () => {
+  const id = players.length;
+  const name = document.getElementById('nameinput').value;
+  const newPlayer = new Player(name, id);
+
+  newPlayer.addCardsToHand(deck.dealCards());
+  players.push({ ...newPlayer });
+};
+
+const newGame = () => {
+  addPlayer();
+  console.log(players[0].viewHand());
+};
+
+let btnEvtHandler = () => {
+  addPlayer(name);
+};
+
+let newGameBtnEvtHandler = () => {
+  newGame();
+};
 
 window.addEventListener('load', () => {
+  deck.addCards(Card, actionCards);
+  deck.addCards(Card, pictureCards);
+  deck.addExtras(Card, actionCards2);
+  deck.shuffle();
+
   document
     .getElementById('button')
     .addEventListener('click', btnEvtHandler, false);
+  document
+    .getElementById('newGame')
+    .addEventListener('click', newGameBtnEvtHandler, false);
 });
-//Button to add username and join game
-let btnEvtHandler = () => {
-  const playerName = nameInput.value;
-  newGame.addPlayer(playerName);
-};
-
-deck.addCards(Card, actionCards);
-deck.addCards(Card, pictureCards);
-deck.addExtras(Card, actionCards2);
-deck.shuffle();
-
-//This is where I am currently, 4 cards spliced from FullDeck
-console.log(deck.dealCards());
-
-newPlayer.addCardsToHand(deck.dealCards());
-console.log('Our Hand!!!!', newPlayer.viewHand());
