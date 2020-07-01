@@ -17,7 +17,7 @@ const addPlayer = () => {
 
 const newGame = () => {
   addPlayer();
-  console.log(players[0].viewHand());
+  console.log(players[0].viewInfo());
 };
 
 let btnEvtHandler = () => {

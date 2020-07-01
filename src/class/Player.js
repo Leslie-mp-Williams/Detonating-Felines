@@ -12,6 +12,14 @@ export default class Player {
   viewHand = () => {
     return this.hand;
   };
+
+  viewInfo = () => {
+    return {
+      id: this.id,
+      name: this.name,
+      hand: this.hand,
+    };
+  };
 }
 
 //Player constructor
